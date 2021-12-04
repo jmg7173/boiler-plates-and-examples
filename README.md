@@ -1,13 +1,13 @@
 # Boiler plates and examples
 ### Backend frameworks
-* Python
+* Python (above 3.10.0)
   * Synchronous RESTful API frameworks
     * Flask
     * Django
   * Asynchronous RESTful API frameworks
     * Sanic
 
-* Typescript
+* Typescript (above 4.5.2)
   * GraphQL
     * Apollo
     * Prisma
@@ -15,6 +15,9 @@
 ### Frontend frameworks with Typescript
 * React.js
 * Vue.js
+
+### UI package
+* React - antd
 
 ### Database
 * Postgres

@@ -1,0 +1,6 @@
+Django==3.2.9
+Flask==2.0.2
+sanic==21.9.3
+
+flake8==4.0.1
+black==21.11b1
