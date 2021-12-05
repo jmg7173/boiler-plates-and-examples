@@ -1,13 +1,18 @@
 from flask import Flask
 
+from config import Config, get_config
+from v1 import api as v1_api
 
-app = Flask(__name__)
 
+def create_app(config: Config) -> Flask:
+    app = Flask(config.APP_NAME)
+    app.config.from_object(config)
+    app.register_blueprint(v1_api)
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
+    return app
+
 
 if __name__ == '__main__':
-    app.run()
-
+    config: Config = get_config()
+    app: Flask = create_app(config)
+    app.run(host='0.0.0.0')
