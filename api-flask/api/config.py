@@ -38,4 +38,6 @@ CONFIG = {
 
 
 def get_config(env: str = 'prod') -> Config:
+    if not env:
+        env = 'prod'
     return CONFIG[env]

@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -21,6 +23,6 @@ def create_app(config: Config) -> Flask:
 
 
 if __name__ == '__main__':
-    config: Config = get_config()
+    config: Config = get_config(os.environ.get('APP_MODE'))
     app: Flask = create_app(config)
     app.run(host='0.0.0.0')
