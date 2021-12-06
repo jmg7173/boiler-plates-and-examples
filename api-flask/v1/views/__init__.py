@@ -1,1 +1,1 @@
-from v1.views.user import user_api
+from v1.views.auth import user_api
