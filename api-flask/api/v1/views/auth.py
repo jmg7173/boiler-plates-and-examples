@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-user_api = Blueprint('auth', __name__, url_prefix='/user')
+user_api = Blueprint('auth', __name__, url_prefix='/auth')
 
 
 @user_api.post('/login')
