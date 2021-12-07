@@ -1,0 +1,54 @@
+version: "2.3"
+services:
+  api-flask-nginx-dev:
+    container_name: api-flask-nginx-dev
+    restart: always
+    image: nginx:1.21.4
+    ports:
+      - 8000:80
+    volumes:
+      - $PWD/../../nginx/nginx-dev.conf:/etc/nginx/nginx.conf
+    networks:
+      - app
+    depends_on:
+      - api-flask-dev
+
+  api-flask-dev:
+    image: app/api-flask:dev
+    build:
+      context: $PWD/../../
+      dockerfile: $PWD/../base/Dockerfile
+    container_name: api-flask-dev
+    restart: always
+    env_file:
+      - $PWD/../../.env.dev
+    volumes:
+      - $PWD/../../api:/opt/app/api
+      - $PWD/../../volumes:/opt/app/volumes
+    working_dir: /opt/app/api
+    command: "python3 app.py"
+    networks:
+      - app
+    depends_on:
+      - api-postgres-dev
+
+  api-postgres-dev:
+    container_name: api-postgres-dev
+    restart: always
+    image: postgres:14
+    environment:
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+    volumes:
+      - $PWD/../../volumes/data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - app
+
+volumes:
+  postgres:
+
+networks:
+  app:
+    external: true

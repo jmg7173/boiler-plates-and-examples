@@ -25,4 +25,4 @@ def create_app(config: Config) -> Flask:
 if __name__ == '__main__':
     config: Config = get_config(os.environ.get('APP_MODE'))
     app: Flask = create_app(config)
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=8000)
