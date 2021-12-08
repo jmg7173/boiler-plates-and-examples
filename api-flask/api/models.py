@@ -1,3 +1,5 @@
+from sqlalchemy.sql import func
+
 from app import db
 
 
@@ -7,7 +9,7 @@ class User(db.Model):
     username = db.Column(db.String(100))
     email = db.Column(db.String(100))
     password = db.Column(db.String(100))
-    created_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, server_default=func.now())
 
     def to_dict(self):
         return {
