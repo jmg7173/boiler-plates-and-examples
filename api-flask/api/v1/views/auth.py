@@ -1,18 +1,18 @@
 from flask import Blueprint
 
-user_api = Blueprint('auth', __name__, url_prefix='/auth')
+auth_api = Blueprint('auth', __name__, url_prefix='/auth')
 
 
-@user_api.post('/login')
-def login(request):
+@auth_api.post('/login')
+def login():
     pass
 
 
-@user_api.post('/logout')
-def logout(request):
+@auth_api.post('/logout')
+def logout():
     pass
 
 
-@user_api.post('/signup')
-def signup(request):
+@auth_api.post('/signup')
+def signup():
     pass
