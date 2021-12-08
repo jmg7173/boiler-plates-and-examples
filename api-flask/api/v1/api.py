@@ -2,10 +2,12 @@ from flask import Blueprint, jsonify
 
 from v1.views import (
     auth_api,
+    users_api,
 )
 
 api = Blueprint('v1', __name__, url_prefix='/v1/api')
 api.register_blueprint(auth_api)
+api.register_blueprint(users_api)
 
 
 @api.get('/')

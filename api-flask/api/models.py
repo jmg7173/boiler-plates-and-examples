@@ -1,9 +1,38 @@
+from flask import url_for
 from sqlalchemy.sql import func
 
 from app import db
 
 
-class User(db.Model):
+class PaginatedAPIMixin(object):
+    @staticmethod
+    def to_collection_dict(query, page, page_size, endpoint, **kwargs):
+        resources = query.paginate(page, page_size, error_out=False)
+        return {
+            'items': [item.to_dict() for item in resources.items],
+            'pagination': {
+                'page': page,
+                'page_size': page_size,
+                'total_pages': resources.pages,
+                'total_items': resources.total,
+            },
+            '_links': {
+                'self': url_for(endpoint, page=page, page_size=page_size, **kwargs),
+                'next': (
+                    url_for(endpoint, page=page + 1, page_size=page_size, **kwargs)
+                    if resources.has_next
+                    else None
+                ),
+                'prev': (
+                    url_for(endpoint, page=page - 1, page_size=page_size, **kwargs)
+                    if resources.has_prev
+                    else None
+                ),
+            },
+        }
+
+
+class User(PaginatedAPIMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100))
@@ -17,4 +46,7 @@ class User(db.Model):
             'username': self.username,
             'email': self.email,
             'created_at': self.created_at.strftime('%Y-%m-%dT%H:%M:%S'),
+            '_links': {
+                'self': url_for('v1.users.get_user', id=self.id),
+            }
         }
