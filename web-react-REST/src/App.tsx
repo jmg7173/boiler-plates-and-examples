@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
 import MainView from './views/MainView'
 import NavBar from './components/NavBar'
+import 'antd/dist/antd.css'
 
 function App() {
   return (

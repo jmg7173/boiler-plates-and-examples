@@ -13,7 +13,7 @@ const NavBar: React.FC = () => {
         Boiler plate app
       </CenterContainer>
       <RightContainer>
-        <Button>Sign Up</Button>
+        <Button type='primary' shape='round'>Sign Up</Button>
       </RightContainer>
     </Container>
   )
