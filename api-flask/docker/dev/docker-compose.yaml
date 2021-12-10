@@ -1,6 +1,6 @@
-version: "2.3"
+version: "3.8"
 services:
-  api-flask-nginx-dev:
+  app-nginx-dev:
     container_name: api-flask-nginx-dev
     restart: always
     image: nginx:1.21.4
