@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  web-rest-dev:
+    container_name: web-rest-dev
+    restart: always
+    image: app/web-react-rest:dev
+    volumes:
+      - $PWD/../../web/src:/opt/app/web/src
+      - $PWD/../../web/public:/opt/app/web/public
+    working_dir: /opt/app/web
+    command: "yarn start"
+    networks:
+      - app
+
+networks:
+  app:
+    external: true
