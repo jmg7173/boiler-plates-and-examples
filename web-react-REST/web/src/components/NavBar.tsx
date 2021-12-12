@@ -1,7 +1,8 @@
 import React from 'react'
-import { Container, CenterContainer, RightContainer, LeftContainer } from './NavBar.style'
+import { CenterContainer, Container, LeftContainer, RightContainer } from './NavBar.style'
 import { Button } from 'antd'
 import { MenuOutlined } from '@ant-design/icons'
+import { Link } from 'react-router-dom'
 
 const NavBar: React.FC = () => {
   return (
@@ -13,7 +14,17 @@ const NavBar: React.FC = () => {
         Boiler plate app
       </CenterContainer>
       <RightContainer>
-        <Button type='primary' shape='round'>Sign Up</Button>
+        <Link to={{ pathname: '/login' }}>
+          <Button
+            type="default"
+            style={{ background: 'transparent', border: 'none' }}
+          >
+            Sign In
+          </Button>
+        </Link>
+        <Link to={{ pathname: '/signup' }}>
+          <Button type='primary' shape='round'>Sign Up</Button>
+        </Link>
       </RightContainer>
     </Container>
   )
