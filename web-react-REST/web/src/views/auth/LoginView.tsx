@@ -8,10 +8,24 @@ const LoginView: React.FC = () => {
       <h1>Sign in to Boilerplate</h1>
       <Form
         initialValues={{ remember: true }}
-        onFinish={(e) => {
+        onFinish={async (e) => {
           const { username, password } = e
           // FIXME: temporal code until add fetch uri
-          console.log(username, password)
+          const resp = await fetch('http://localhost:8000/v1/api/auth/login', {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username,
+              password,
+            }),
+          }).then((response) => {
+            return response.json().then((data) => {
+              return data
+            })
+          })
+          console.log(resp)
         }}
       >
         <div className='login-form'>
