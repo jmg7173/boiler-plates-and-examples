@@ -50,6 +50,7 @@ const LoginView: React.FC = () => {
         <Form.Item
           name='remember'
           style={{ textAlign: 'right' }}
+          valuePropName='checked'
         >
           <Checkbox>
             Remember me
