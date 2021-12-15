@@ -38,7 +38,7 @@ class User(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100))
     email = db.Column(db.String(100))
-    password = db.Column(db.String(100))
+    password = db.Column(db.String(150))
     created_at = db.Column(db.DateTime, server_default=func.now())
 
     def check_password(self, password):
