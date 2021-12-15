@@ -4,6 +4,8 @@ services:
     container_name: web-rest-dev
     restart: always
     image: app/web-react-rest:dev
+    env_file:
+      - $PWD/../../.env.dev
     volumes:
       - $PWD/../../web/src:/opt/app/web/src
       - $PWD/../../web/public:/opt/app/web/public
