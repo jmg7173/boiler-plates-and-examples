@@ -8,17 +8,21 @@ export const Container = styled.div`
   margin-right: auto;
   margin-top: 100px;
   
-  h1 {
+  > h1 {
     margin-top: 40px;
   }
-  .ant-form {
+  > .ant-form {
     text-align: left;
     border-radius: 20px;
     border: 2px outset black;
     margin-top: 30px;
-    .login-form {
+    > .login-form {
       margin: 30px 40px 5px;
-      .ant-row {
+      > p.error-msg {
+        color: red;
+        font-weight: bold;
+      }
+      > .ant-row {
         margin-bottom: 10px;
       }
       .sign-in-btn {
