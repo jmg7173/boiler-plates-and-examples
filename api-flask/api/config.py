@@ -5,6 +5,7 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Config:
     APP_NAME: str = 'app'
+    JWT_SECRET_KEY: str = os.environ.get('JWT_SECRET_KEY')
     TESTING: bool = False
     DEBUG: bool = False
 
