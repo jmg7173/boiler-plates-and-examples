@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 import { Container } from './LoginView.style'
 import { Button, Checkbox, Form, Input } from 'antd'
 import { login } from '../../utils/fetch/fetchAPI'
+import { useSetRecoilState } from 'recoil'
+import { meState } from '../../stores/me'
 
 const LoginView: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const setMe = useSetRecoilState(meState)
   return (
     <Container>
       <h1>Sign in to Boilerplate</h1>
@@ -13,12 +16,11 @@ const LoginView: React.FC = () => {
         onFinish={async (event) => {
           const { username, password } = event
           try {
-            // TODO: check token!
-            const { access_token: accessToken, refresh_token: refreshToken } = await login({
+            await login({
               username,
               password,
-            })
-            console.log(accessToken, refreshToken)
+            }, setMe)
+            history.back()
           } catch (e: any) {
             if (e.status !== 400){
               setErrorMessage(`Unknown error occurred: ${e.status}`)

@@ -19,10 +19,21 @@ export const fetchAPI = async (uri: string, method: string, data?: Record<string
   return fetcher.fetch(uri, request)
 }
 
-export const login = (data: Record<string, any>) => {
-  return fetchAPI('/auth/login', 'post', data)
+export const login = async (data: Record<string, any>, setMe: any) => {
+  const {
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  } = await fetchAPI('/auth/login', 'post', data)
+
+  const fetcher = FetchManager.getInstance()
+  fetcher.setAccessToken(accessToken)
+  fetcher.setRefreshToken(refreshToken)
+  setMe(data.username)
 }
 
-export const logout = () => {
-  return fetchAPI('/auth/logout', 'post')
+export const logout = async (setMe: any) => {
+  const fetcher = FetchManager.getInstance()
+  fetcher.resetToken()
+  await fetchAPI('/auth/logout', 'post')
+  setMe(null)
 }
