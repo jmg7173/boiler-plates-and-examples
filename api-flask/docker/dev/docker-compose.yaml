@@ -46,6 +46,17 @@ services:
     networks:
       - app
 
+  api-redis-dev:
+    container_name: api-redis-dev
+    image: redis:6.2.6
+    restart: always
+    volumes:
+      - $PWD/../../volumes/redis_data:/data
+    ports:
+      - 6379:6379
+    networks:
+      - app
+
 volumes:
   postgres:
 

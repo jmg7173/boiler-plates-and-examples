@@ -1,11 +1,13 @@
 import os
 from dataclasses import dataclass
+from datetime import timedelta
 
 
 @dataclass(frozen=True)
 class Config:
     APP_NAME: str = 'app'
     JWT_SECRET_KEY: str = os.environ.get('JWT_SECRET_KEY')
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=int(os.environ.get('JWT_ACCESS_EXPIRES', 1440)))
     TESTING: bool = False
     DEBUG: bool = False
 
@@ -18,6 +20,9 @@ class Config:
         os.environ.get('POSTGRESQL_DATABASE_NAME'),
     )
     SQLALCHEMY_TRACK_MODIFICATIONS: int = 1
+
+    REDIS_HOSTNAME: str = os.environ.get('REDIS_HOSTNAME')
+    REDIS_PORT: int = os.environ.get('REDIS_PORT')
 
 
 @dataclass(frozen=True)
