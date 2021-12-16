@@ -1,13 +1,14 @@
 import React from 'react'
 import { CenterContainer, Container, LeftContainer, RightContainer } from './NavBar.style'
-import { Button } from 'antd'
+import { Button, message } from 'antd'
 import { MenuOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { meState } from '../stores/me'
+import { logout } from '../utils/fetch/fetchAPI'
 
 const NavBar: React.FC = () => {
-  const me = useRecoilValue(meState)
+  const [me, setMe] = useRecoilState(meState)
   return (
     <Container>
       <LeftContainer>
@@ -19,9 +20,19 @@ const NavBar: React.FC = () => {
       <RightContainer>
         {me
           ? (
-            <Button>
-              Logout
-            </Button>
+            <>
+              <div className='user'>Welcome { me }!</div>
+              <Button
+                type="primary"
+                shape="round"
+                onClick={ async () => {
+                  await logout(setMe)
+                  message.success('Successfully logged out!')
+                } }
+              >
+                Sign Out
+              </Button>
+            </>
           ) : (
             <>
               <Link to={{ pathname: '/login' }}>
@@ -33,7 +44,7 @@ const NavBar: React.FC = () => {
                 </Button>
               </Link>
               <Link to={{ pathname: '/signup' }}>
-                <Button type="primary" shape="round">Sign Up</Button>
+                <Button type='primary' shape='round'>Sign Up</Button>
               </Link>
             </>
           )
