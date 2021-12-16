@@ -33,7 +33,7 @@ export const login = async (data: Record<string, any>, setMe: any) => {
 
 export const logout = async (setMe: any) => {
   const fetcher = FetchManager.getInstance()
-  fetcher.resetToken()
   await fetchAPI('/auth/logout', 'post')
+  fetcher.resetToken()
   setMe(null)
 }
