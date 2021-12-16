@@ -37,3 +37,12 @@ export const logout = async (setMe: any) => {
   fetcher.resetToken()
   setMe(null)
 }
+
+export const getMe = async () => {
+  try {
+    const { user } = await fetchAPI('/auth/me', 'get')
+    return user
+  } catch {
+    return null
+  }
+}

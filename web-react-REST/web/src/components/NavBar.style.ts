@@ -26,4 +26,9 @@ export const RightContainer = styled.div`
   align-content: flex-end;
   margin-left: auto;
   padding-right: 10px;
+  .user {
+    position: relative;
+    top: 4px;
+    right: 20px;
+  }
 `
