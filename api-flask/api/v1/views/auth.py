@@ -8,6 +8,7 @@ from flask_jwt_extended import (
     jwt_required, get_jwt, get_jwt_identity,
 )
 
+from app import db
 from config import Config, get_config
 from models import User
 
@@ -56,4 +57,34 @@ def me():
 
 @auth_api.post('/signup')
 def signup():
-    pass
+    data = request.get_json()
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    if not username or not email or not password:
+        return jsonify({'validation': {
+            'username': '' if username else 'Empty username field!',
+            'email': '' if email else 'Empty email field!',
+            'password': '' if password else 'Empty password field!',
+        }})
+
+    user = User.query.filter_by(username=username).first()
+    error_msg = {}
+    if user:
+        error_msg['username'] = 'Already exist username!'
+
+    user = User.query.filter_by(email=email).first()
+    if user:
+        error_msg['email'] = 'Already exist email!'
+
+    if error_msg:
+        return jsonify({'validation': error_msg}), 400
+
+    user = User(
+        username=username,
+        email=email,
+    )
+    user.set_password(password)
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({'message': "Successfully registered!"})

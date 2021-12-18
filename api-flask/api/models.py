@@ -1,6 +1,6 @@
 from flask import url_for
 from sqlalchemy.sql import func
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db
 
@@ -40,6 +40,13 @@ class User(PaginatedAPIMixin, db.Model):
     email = db.Column(db.String(100))
     password = db.Column(db.String(150))
     created_at = db.Column(db.DateTime, server_default=func.now())
+
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
