@@ -1,4 +1,5 @@
 import FetchManager from './fetchManager'
+import { SetterOrUpdater } from 'recoil'
 
 export const fetchAPI = async (uri: string, method: string, data?: Record<string, any>) => {
   const fetcher = FetchManager.getInstance()
@@ -19,7 +20,7 @@ export const fetchAPI = async (uri: string, method: string, data?: Record<string
   return fetcher.fetch(uri, request)
 }
 
-export const login = async (data: Record<string, any>, setMe: any) => {
+export const login = async (data: Record<string, any>, setMe: SetterOrUpdater<any>) => {
   const {
     access_token: accessToken,
     refresh_token: refreshToken,
@@ -31,7 +32,7 @@ export const login = async (data: Record<string, any>, setMe: any) => {
   setMe(data.username)
 }
 
-export const logout = async (setMe: any) => {
+export const logout = async (setMe: SetterOrUpdater<any>) => {
   const fetcher = FetchManager.getInstance()
   await fetchAPI('/auth/logout', 'post')
   fetcher.resetToken()

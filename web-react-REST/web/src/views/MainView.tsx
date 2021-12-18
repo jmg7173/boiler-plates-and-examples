@@ -14,7 +14,7 @@ const MainView: React.FC = () => {
       setMe(user)
     }
     f()
-  }, [])
+  })
 
   return (
     <>

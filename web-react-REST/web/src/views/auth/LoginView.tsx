@@ -21,9 +21,9 @@ const LoginView: React.FC = () => {
               password,
             }, setMe)
             history.back()
-          } catch (e: any) {
+          } catch (e: ResponseType | any) {
             if (e.status !== 400){
-              setErrorMessage(`Unknown error occurred: ${e.status}`)
+              setErrorMessage(`Unknown error occurred: ${ e.status }`)
               return
             }
             const errorResponse = await e.json()

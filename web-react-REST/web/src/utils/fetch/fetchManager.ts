@@ -53,7 +53,7 @@ export default class FetchManager {
     }
     return fetch(this.endpoint + uri, requestWithToken).then((response) => {
       if (!response.ok) return Promise.reject(response)
-      return response.json().then((json: any) => {
+      return response.json().then((json) => {
         return json
       })
     })

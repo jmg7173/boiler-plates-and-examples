@@ -25,10 +25,10 @@ const NavBar: React.FC = () => {
               <Button
                 type="primary"
                 shape="round"
-                onClick={ async () => {
+                onClick={async () => {
                   await logout(setMe)
                   message.success('Successfully logged out!')
-                } }
+                }}
               >
                 Sign Out
               </Button>
