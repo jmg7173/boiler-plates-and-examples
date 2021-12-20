@@ -39,3 +39,30 @@
 * Sanic with Vue.js
 * Apollo with Vue.js
 
+# Included features
+* User
+  * signup / login / logout / JWT token management
+* Websocket
+* Task runner with celery
+* Frontend examples
+  * React
+    * Custom hooks
+    * antd UI customizing
+    * Modal
+  * Mocking up backend api
+* CI
+* GitHub Action 
+  * Lint, Testing
+* Dependabot
+* Test codes with code coverage
+* OAuth (with google)
+
+# TODOs
+* [ ] CI
+  * Auto lint check
+  * Check test code passed
+* Test codes
+  * [ ] Backend
+  * [ ] Frontend
+  * [ ] code coverage
+* [ ] Dependabot
