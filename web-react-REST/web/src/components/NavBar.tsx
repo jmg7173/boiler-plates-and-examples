@@ -1,7 +1,6 @@
 import React from 'react'
-import { CenterContainer, Container, LeftContainer, RightContainer } from './NavBar.style'
+import { Container, LeftContainer, Logo, RightContainer } from './NavBar.style'
 import { Button, message } from 'antd'
-import { MenuOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { meState } from '../stores/me'
@@ -12,42 +11,39 @@ const NavBar: React.FC = () => {
   return (
     <Container>
       <LeftContainer>
-        <MenuOutlined />
+        <Link to='/'>
+          <Logo className='logo'>
+            Boiler plate app
+          </Logo>
+        </Link>
       </LeftContainer>
-      <CenterContainer>
-        Boiler plate app
-      </CenterContainer>
       <RightContainer>
         {me
-          ? (
-            <>
-              <div className='user'>Welcome { me }!</div>
+          ? (<>
+            <div className='user'>Welcome { me }!</div>
+            <Button
+              type='primary'
+              shape='round'
+              onClick={async () => {
+                await logout(setMe)
+                message.success('Successfully logged out!')
+              }}
+            >
+              Sign Out
+            </Button>
+          </>) : (<>
+            <Link to={{ pathname: '/login' }}>
               <Button
-                type="primary"
-                shape="round"
-                onClick={async () => {
-                  await logout(setMe)
-                  message.success('Successfully logged out!')
-                }}
+                type="default"
+                style={{ background: 'transparent', border: 'none' }}
               >
-                Sign Out
+                Sign In
               </Button>
-            </>
-          ) : (
-            <>
-              <Link to={{ pathname: '/login' }}>
-                <Button
-                  type="default"
-                  style={{ background: 'transparent', border: 'none' }}
-                >
-                  Sign In
-                </Button>
-              </Link>
-              <Link to={{ pathname: '/signup' }}>
-                <Button type='primary' shape='round'>Sign Up</Button>
-              </Link>
-            </>
-          )
+            </Link>
+            <Link to={{ pathname: '/signup' }}>
+              <Button type='primary' shape='round'>Sign Up</Button>
+            </Link>
+          </>)
         }
 
       </RightContainer>
