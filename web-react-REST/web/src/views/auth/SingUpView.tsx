@@ -1,9 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container } from './SignUpView.style'
 import { Button, Form, Input } from 'antd'
 import { fetchAPI } from '../../utils/fetch/fetchAPI'
+import { meState } from '../../stores/me'
+import { useRecoilValue } from 'recoil'
+import { useNavigate } from 'react-router-dom'
 
 const SignUpView: React.FC = () => {
+  const me = useRecoilValue(meState)
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (me) {
+      navigate('/')
+    }
+  }, [me])
   const [errorMessage, setErrorMessage] = useState<string>('')
   return (
     <Container>
@@ -18,7 +28,7 @@ const SignUpView: React.FC = () => {
               email,
               password,
             })
-            history.back()
+            navigate('/login')
           } catch (e: ResponseType | any) {
             if (e.status !== 400){
               setErrorMessage(`Unknown error occurred: ${ e.status }`)

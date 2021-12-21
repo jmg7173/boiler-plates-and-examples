@@ -1,13 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container } from './LoginView.style'
 import { Button, Checkbox, Form, Input } from 'antd'
 import { login } from '../../utils/fetch/fetchAPI'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { meState } from '../../stores/me'
+import { useNavigate } from 'react-router-dom'
 
 const LoginView: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('')
-  const setMe = useSetRecoilState(meState)
+  const [me, setMe] = useRecoilState(meState)
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (me){
+      navigate('/')
+    }
+  })
   return (
     <Container>
       <h1>Sign in to Boilerplate</h1>
