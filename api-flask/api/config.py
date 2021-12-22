@@ -1,6 +1,7 @@
 import os
 from dataclasses import dataclass
 from datetime import timedelta
+from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -23,6 +24,8 @@ class Config:
 
     REDIS_HOSTNAME: str = os.environ.get('REDIS_HOSTNAME')
     REDIS_PORT: int = os.environ.get('REDIS_PORT')
+
+    VOLUME_PATH: Path = Path(os.environ.get('VOLUME_PATH', '/opt/app/volumes'))
 
 
 @dataclass(frozen=True)

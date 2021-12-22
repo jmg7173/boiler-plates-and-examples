@@ -1,4 +1,7 @@
 import os
+import urllib.request
+from hashlib import md5
+from pathlib import Path
 
 import redis
 from flask import Blueprint, request, jsonify
@@ -36,6 +39,7 @@ def login():
         return jsonify(
             access_token=create_access_token(identity=username),
             refresh_token=create_refresh_token(identity=username),
+            profile_img_path=user.profile_img_path,
         ), 200
 
     return jsonify({'message': 'Identification information is not correct'}), 400
@@ -52,7 +56,9 @@ def logout():
 @auth_api.get('/me')
 @jwt_required()
 def me():
-    return jsonify(user=get_jwt_identity())
+    username = get_jwt_identity()
+    user = User.query.filter_by(username=username).first()
+    return jsonify(user=username, profile_img_path=user.profile_img_path)
 
 
 @auth_api.post('/signup')
@@ -80,11 +86,24 @@ def signup():
     if error_msg:
         return jsonify({'validation': error_msg}), 400
 
+    profile_img_base_dir = Path('images/profile')
+    profile_img_dir = config.VOLUME_PATH / profile_img_base_dir
+    profile_img_filename = f'{username}.png'
+    profile_img_fullpath = profile_img_dir / profile_img_filename
+    profile_img_request_path = profile_img_base_dir / profile_img_filename
+    os.makedirs(profile_img_dir, exist_ok=True)
+    digest = md5(username.encode('utf-8')).hexdigest()
+    urllib.request.urlretrieve(
+        f'https://www.gravatar.com/avatar/{digest}?d=identicon&s=200',
+        profile_img_fullpath,
+    )
+
     user = User(
         username=username,
         email=email,
+        profile_img_path=profile_img_request_path,
     )
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
-    return jsonify({'message': "Successfully registered!"})
+    return jsonify({'message': 'Successfully registered!'})

@@ -40,10 +40,12 @@ class User(PaginatedAPIMixin, db.Model):
     email = db.Column(db.String(100))
     password = db.Column(db.String(150))
     created_at = db.Column(db.DateTime, server_default=func.now())
+    profile_img_path = db.Column(db.String(150))
 
-    def __init__(self, username, email):
+    def __init__(self, username, email, profile_img_path):
         self.username = username
         self.email = email
+        self.profile_img_path = str(profile_img_path)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)

@@ -8,6 +8,7 @@ services:
       - 8000:80
     volumes:
       - $PWD/../../nginx/nginx-dev.conf:/etc/nginx/nginx.conf
+      - $PWD/../../volumes/images:/static/images
     networks:
       - app
     depends_on:
