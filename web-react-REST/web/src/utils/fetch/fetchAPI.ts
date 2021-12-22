@@ -1,5 +1,6 @@
 import FetchManager from './fetchManager'
 import { SetterOrUpdater } from 'recoil'
+import { IUser } from '../../interfaces/User'
 
 export const fetchAPI = async (uri: string, method: string, data?: Record<string, any>) => {
   const fetcher = FetchManager.getInstance()
@@ -20,19 +21,28 @@ export const fetchAPI = async (uri: string, method: string, data?: Record<string
   return fetcher.fetch(uri, request)
 }
 
-export const login = async (data: Record<string, any>, setMe: SetterOrUpdater<any>) => {
+export const fetchImg = async (uri: string) => {
+  const fetcher = FetchManager.getInstance()
+  return fetcher.fetchStatic(uri, { method: 'get' })
+}
+
+export const login = async (data: Record<string, any>, setMe: SetterOrUpdater<IUser | null>) => {
   const {
     access_token: accessToken,
     refresh_token: refreshToken,
+    profile_img_path: profileImgPath,
   } = await fetchAPI('/auth/login', 'post', data)
 
   const fetcher = FetchManager.getInstance()
   fetcher.setAccessToken(accessToken)
   fetcher.setRefreshToken(refreshToken)
-  setMe(data.username)
+  setMe({
+    username: data.username,
+    profileImgPath,
+  })
 }
 
-export const logout = async (setMe: SetterOrUpdater<any>) => {
+export const logout = async (setMe: SetterOrUpdater<IUser | null>) => {
   const fetcher = FetchManager.getInstance()
   await fetchAPI('/auth/logout', 'post')
   fetcher.resetToken()
@@ -41,8 +51,7 @@ export const logout = async (setMe: SetterOrUpdater<any>) => {
 
 export const getMe = async () => {
   try {
-    const { user } = await fetchAPI('/auth/me', 'get')
-    return user
+    return await fetchAPI('/auth/me', 'get')
   } catch {
     return null
   }

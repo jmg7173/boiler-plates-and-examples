@@ -17,7 +17,10 @@ function App() {
   useEffect(() => {
     const f = async () => {
       const user = await getMe()
-      setMe(user)
+      setMe({
+        username: user.username,
+        profileImgPath: user.profile_img_path,
+      })
     }
     f()
   })

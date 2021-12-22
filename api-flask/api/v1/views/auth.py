@@ -58,7 +58,7 @@ def logout():
 def me():
     username = get_jwt_identity()
     user = User.query.filter_by(username=username).first()
-    return jsonify(user=username, profile_img_path=user.profile_img_path)
+    return jsonify(username=username, profile_img_path=user.profile_img_path)
 
 
 @auth_api.post('/signup')

@@ -11,6 +11,8 @@ export default class FetchManager {
 
   private endpoint = `${ this.protocol }://${ this.hostname }:${ this.port }/${ this.apiPrefix }`
 
+  private staticFileEndpoint = `${ this.protocol }://${ this.hostname }:${ this.port }/static/`
+
   public getAccessToken: () => string | null = () => {
     return localStorage.getItem('accessToken')
   }
@@ -55,6 +57,15 @@ export default class FetchManager {
       if (!response.ok) return Promise.reject(response)
       return response.json().then((json) => {
         return json
+      })
+    })
+  }
+
+  public fetchStatic(uri: string, request: RequestInit) {
+    return fetch(this.staticFileEndpoint + uri, request).then((response) => {
+      if (!response.ok) return Promise.reject(response)
+      return response.blob().then((blob) => {
+        return blob
       })
     })
   }

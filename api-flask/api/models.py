@@ -59,6 +59,7 @@ class User(PaginatedAPIMixin, db.Model):
             'username': self.username,
             'email': self.email,
             'created_at': self.created_at.strftime('%Y-%m-%dT%H:%M:%S'),
+            'profile_img_path': self.profile_img_path,
             '_links': {
                 'self': url_for('v1.users.get_user', id=self.id),
             }
