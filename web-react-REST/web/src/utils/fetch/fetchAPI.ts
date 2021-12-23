@@ -56,3 +56,8 @@ export const getMe = async () => {
     return null
   }
 }
+
+export const getEndpoint = () => {
+  const fetcher = FetchManager.getInstance()
+  return fetcher.getEndpoint()
+}

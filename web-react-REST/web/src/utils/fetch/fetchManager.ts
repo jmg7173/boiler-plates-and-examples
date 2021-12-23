@@ -9,9 +9,13 @@ export default class FetchManager {
 
   private apiPrefix = process.env.REACT_APP_API_PREFIX
 
-  private endpoint = `${ this.protocol }://${ this.hostname }:${ this.port }/${ this.apiPrefix }`
+  private apiEndpoint = `${ this.protocol }://${ this.hostname }:${ this.port }/${ this.apiPrefix }`
 
-  private staticFileEndpoint = `${ this.protocol }://${ this.hostname }:${ this.port }/static/`
+  private endpoint = `${ this.protocol }://${ this.hostname }:${ this.port }/`
+
+  public getEndpoint: () => string = () => {
+    return this.endpoint
+  }
 
   public getAccessToken: () => string | null = () => {
     return localStorage.getItem('accessToken')
@@ -53,7 +57,7 @@ export default class FetchManager {
       ...request,
       headers,
     }
-    return fetch(this.endpoint + uri, requestWithToken).then((response) => {
+    return fetch(this.apiEndpoint + uri, requestWithToken).then((response) => {
       if (!response.ok) return Promise.reject(response)
       return response.json().then((json) => {
         return json
@@ -62,7 +66,7 @@ export default class FetchManager {
   }
 
   public fetchStatic(uri: string, request: RequestInit) {
-    return fetch(this.staticFileEndpoint + uri, request).then((response) => {
+    return fetch(this.endpoint + uri, request).then((response) => {
       if (!response.ok) return Promise.reject(response)
       return response.blob().then((blob) => {
         return blob

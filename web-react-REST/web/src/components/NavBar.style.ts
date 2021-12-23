@@ -34,8 +34,14 @@ export const RightContainer = styled.div`
   margin-left: auto;
   padding-right: 10px;
   .user {
-    position: relative;
-    top: 4px;
-    right: 20px;
+    padding-top: 4px;
+    padding-right: 10px;
+  }
+  .profile {
+    padding-right: 10px;
+    img {
+      border-radius: 50%;
+      width: 30px;
+    }
   }
 `
