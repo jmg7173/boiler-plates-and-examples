@@ -17,10 +17,12 @@ function App() {
   useEffect(() => {
     const f = async () => {
       const user = await getMe()
-      setMe({
-        username: user.username,
-        profileImgPath: user.profile_img_path,
-      })
+      if (user) {
+        setMe({
+          username: user.username,
+          profileImgPath: user.profile_img_path,
+        })
+      }
     }
     f()
   })
