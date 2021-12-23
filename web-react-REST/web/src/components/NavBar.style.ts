@@ -33,15 +33,20 @@ export const RightContainer = styled.div`
   align-content: flex-end;
   margin-left: auto;
   padding-right: 10px;
-  .user {
-    padding-top: 4px;
-    padding-right: 10px;
+  .avatar {
+    cursor: pointer;
   }
-  .profile {
-    padding-right: 10px;
-    img {
-      border-radius: 50%;
-      width: 30px;
+`
+export const MenuContainer = styled.div`
+  .userInfo {
+    .ant-menu-item-group-title {
+      color: black;
+    }
+  }
+  .ant-menu-item {
+    &:hover {
+      background-color: #1890ff !important;
+      color: white !important;
     }
   }
 `
