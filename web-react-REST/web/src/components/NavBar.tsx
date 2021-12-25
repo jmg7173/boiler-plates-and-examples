@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { SetStateAction, useState } from 'react'
 import {
   Container,
   LeftContainer,
@@ -17,11 +17,24 @@ import {
   SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons'
+import ProfileModal from './modals/ProfileModal'
 
-const menu = (user: IUser, setMe: SetterOrUpdater<IUser | null>) => {
+const menu = (
+  user: IUser,
+  setMe: SetterOrUpdater<IUser | null>,
+  showModal: string | null,
+  setShowModal: React.Dispatch<SetStateAction<string | null>>,
+) => {
   return (
     <MenuContainer>
-      <Menu selectedKeys={[]}>
+      <Menu
+        selectedKeys={[]}
+        onClick={(e) => {
+          if (e.key !== 'signOut') {
+            setShowModal(e.key)
+          }
+        }}
+      >
         <Menu.ItemGroup title={`Signed in as ${user.username}`} className='userInfo' />
         <Menu.Divider />
         <Menu.Item key='profile'>
@@ -39,14 +52,18 @@ const menu = (user: IUser, setMe: SetterOrUpdater<IUser | null>) => {
         >
           <LogoutOutlined /> Sign Out
         </Menu.Item>
-
       </Menu>
+      <ProfileModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
     </MenuContainer>
   )
 }
 
 const NavBar: React.FC = () => {
   const [me, setMe] = useRecoilState(meState)
+  const [showModal, setShowModal] = useState<string | null>(null)
 
   return (
     <Container>
@@ -61,7 +78,7 @@ const NavBar: React.FC = () => {
         {me
           ? (<>
             <Dropdown
-              overlay={menu(me, setMe)}
+              overlay={menu(me, setMe, showModal, setShowModal)}
               trigger={['click']}
             >
               <Avatar
@@ -84,7 +101,6 @@ const NavBar: React.FC = () => {
             </Link>
           </>)
         }
-
       </RightContainer>
     </Container>
   )
