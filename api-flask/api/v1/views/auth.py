@@ -86,24 +86,12 @@ def signup():
     if error_msg:
         return jsonify({'validation': error_msg}), 400
 
-    profile_img_base_dir = Path('images/profile')
-    profile_img_dir = config.VOLUME_PATH / profile_img_base_dir
-    profile_img_filename = f'{username}.png'
-    profile_img_fullpath = profile_img_dir / profile_img_filename
-    profile_img_request_path = profile_img_base_dir / profile_img_filename
-    os.makedirs(profile_img_dir, exist_ok=True)
-    digest = md5(username.encode('utf-8')).hexdigest()
-    urllib.request.urlretrieve(
-        f'https://www.gravatar.com/avatar/{digest}?d=identicon&s=200',
-        profile_img_fullpath,
-    )
-
     user = User(
         username=username,
         email=email,
-        profile_img_path=profile_img_request_path,
     )
     user.set_password(password)
+    user.set_profile_img(username, is_default_img=True)
     db.session.add(user)
     db.session.commit()
     return jsonify({'message': 'Successfully registered!'})

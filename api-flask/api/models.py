@@ -1,8 +1,17 @@
+import base64
+import os
+import urllib.request
+from hashlib import md5
+from pathlib import Path
+
 from flask import url_for
 from sqlalchemy.sql import func
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db
+from config import Config, get_config
+
+config: Config = get_config(os.environ.get('APP_MODE'))
 
 
 class PaginatedAPIMixin(object):
@@ -42,16 +51,35 @@ class User(PaginatedAPIMixin, db.Model):
     created_at = db.Column(db.DateTime, server_default=func.now())
     profile_img_path = db.Column(db.String(150))
 
-    def __init__(self, username, email, profile_img_path):
+    def __init__(self, username, email):
         self.username = username
         self.email = email
-        self.profile_img_path = str(profile_img_path)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+    def set_profile_img(self, username, encoded_img=None, is_default_img=False):
+        profile_img_base_dir = Path('images/profile')
+        profile_img_dir = config.VOLUME_PATH / profile_img_base_dir
+        profile_img_filename = f'{username}.png'
+        profile_img_fullpath = profile_img_dir / profile_img_filename
+        profile_img_request_path = profile_img_base_dir / profile_img_filename
+        os.makedirs(profile_img_dir, exist_ok=True)
+        if is_default_img:
+            digest = md5(username.encode('utf-8')).hexdigest()
+            urllib.request.urlretrieve(
+                f'https://www.gravatar.com/avatar/{digest}?d=identicon&s=200',
+                profile_img_fullpath,
+            )
+        else:
+            img = base64.b64decode(encoded_img)
+            with open(profile_img_fullpath, 'wb') as f:
+                f.write(img)
+
+        self.profile_img_path = str(profile_img_request_path)
 
     def to_dict(self):
         return {
