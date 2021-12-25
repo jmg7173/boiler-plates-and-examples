@@ -19,6 +19,7 @@ function App() {
       const user = await getMe()
       if (user) {
         setMe({
+          id: user.id,
           username: user.username,
           profileImgPath: user.profile_img_path,
         })

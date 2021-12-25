@@ -39,6 +39,7 @@ def login():
         return jsonify(
             access_token=create_access_token(identity=username),
             refresh_token=create_refresh_token(identity=username),
+            id=user.id,
             profile_img_path=user.profile_img_path,
         ), 200
 
@@ -58,7 +59,7 @@ def logout():
 def me():
     username = get_jwt_identity()
     user = User.query.filter_by(username=username).first()
-    return jsonify(username=username, profile_img_path=user.profile_img_path)
+    return jsonify(id=user.id, username=username, profile_img_path=user.profile_img_path)
 
 
 @auth_api.post('/signup')
