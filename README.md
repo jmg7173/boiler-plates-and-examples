@@ -65,4 +65,4 @@
   * [ ] Backend
   * [ ] Frontend
   * [ ] code coverage
-* [ ] Dependabot
+* [x] Dependabot
