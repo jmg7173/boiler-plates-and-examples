@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify
+from typing import Tuple
+
+from flask import Blueprint, jsonify, Response
 
 from v1.views import (
     auth_api,
@@ -11,5 +13,5 @@ api.register_blueprint(users_api)
 
 
 @api.get('/')
-def api_v1():
+def api_v1() -> Tuple[Response, int]:
     return jsonify({'message': 'api v1'}), 200

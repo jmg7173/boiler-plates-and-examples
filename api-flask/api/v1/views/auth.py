@@ -1,10 +1,8 @@
 import os
-import urllib.request
-from hashlib import md5
-from pathlib import Path
+from typing import Union, Tuple
 
 import redis
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -26,7 +24,7 @@ RedisSession = redis.StrictRedis(
 
 
 @auth_api.post('/login')
-def login():
+def login() -> Tuple[Response, int]:
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
@@ -48,7 +46,7 @@ def login():
 
 @auth_api.post('/logout')
 @jwt_required()
-def logout():
+def logout() -> Response:
     jti = get_jwt()['jti']
     RedisSession.set(jti, "", ex=config.JWT_ACCESS_TOKEN_EXPIRES)
     return jsonify(message='Access token revoked')
@@ -56,14 +54,14 @@ def logout():
 
 @auth_api.get('/me')
 @jwt_required()
-def me():
+def me() -> Response:
     username = get_jwt_identity()
     user = User.query.filter_by(username=username).first()
     return jsonify(id=user.id, username=username, profile_img_path=user.profile_img_path)
 
 
 @auth_api.post('/signup')
-def signup():
+def signup() -> Union[Response, Tuple[Response, int]]:
     data = request.get_json()
     username = data.get('username')
     email = data.get('email')

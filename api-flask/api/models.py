@@ -3,6 +3,7 @@ import os
 import urllib.request
 from hashlib import md5
 from pathlib import Path
+from typing import Dict
 
 from flask import url_for
 from sqlalchemy.sql import func
@@ -16,7 +17,7 @@ config: Config = get_config(os.environ.get('APP_MODE'))
 
 class PaginatedAPIMixin(object):
     @staticmethod
-    def to_collection_dict(query, page, page_size, endpoint, **kwargs):
+    def to_collection_dict(query, page, page_size, endpoint, **kwargs) -> Dict:
         resources = query.paginate(page, page_size, error_out=False)
         return {
             'items': [item.to_dict() for item in resources.items],
@@ -58,7 +59,7 @@ class User(PaginatedAPIMixin, db.Model):
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
-    def check_password(self, password):
+    def check_password(self, password) -> bool:
         return check_password_hash(self.password, password)
 
     def set_profile_img(self, username, encoded_img=None, is_default_img=False):
@@ -81,7 +82,7 @@ class User(PaginatedAPIMixin, db.Model):
 
         self.profile_img_path = str(profile_img_request_path)
 
-    def to_dict(self):
+    def to_dict(self) -> Dict:
         return {
             'id': self.id,
             'username': self.username,
