@@ -40,8 +40,9 @@
 * Apollo with Vue.js
 
 # Included features
+~~feature~~ are implemented.
 * User
-  * signup / login / logout / JWT token management
+  * ~~signup / login / logout / JWT token management~~
 * Websocket
 * Task runner with celery
 * Frontend examples
@@ -53,7 +54,7 @@
 * CI
 * GitHub Action 
   * Lint, Testing
-* Dependabot
+* ~~Dependabot~~
 * Test codes with code coverage
 * OAuth (with google)
 
