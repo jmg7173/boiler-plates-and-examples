@@ -4,5 +4,5 @@ Flask-Migrate==3.1.0
 Flask-SQLAlchemy==2.5.1
 gunicorn==20.1.0
 python-dotenv==0.19.2
-psycopg2-binary==2.9.2
+psycopg2-binary==2.9.3
 redis==4.1.0
