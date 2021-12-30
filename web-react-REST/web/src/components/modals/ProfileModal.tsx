@@ -1,9 +1,9 @@
 import React, { SetStateAction, useEffect, useRef, useState } from 'react'
-import { Avatar, Dropdown, Menu, Modal } from 'antd'
+import { Avatar, Button, Col, Dropdown, Menu, Modal, Row, Typography } from 'antd'
 import { meState } from '../../stores/me'
 import { useRecoilValue } from 'recoil'
 import { getEndpoint } from '../../utils/fetch/fetchAPI'
-import { ProfileImgContainer } from './ProfileModal.style'
+import { ProfileContainer, ProfileImgContainer } from './ProfileModal.style'
 import { CameraOutlined } from '@ant-design/icons'
 import { MenuInfo } from 'rc-menu/lib/interface'
 
@@ -65,6 +65,7 @@ const ProfileModal: React.FC<IProfileModalProps> = ({
   const ref = useRef<HTMLInputElement>(null)
   const [newProfileImg, setNewProfileImg] = useState(null)
   const handleCancel = () => setShowModal(null)
+  const [username, setUsername] = useState('')
 
   useEffect(() => {
     setNewProfileImg(null)
@@ -79,18 +80,56 @@ const ProfileModal: React.FC<IProfileModalProps> = ({
         centered={true}
         visible={showModal === 'profile'}
         onCancel={handleCancel}
+        footer={null}
+        width={650}
       >
-        <ProfileImgContainer>
-          <Avatar
-            size={200}
-            src={newProfileImg || getEndpoint() + me!.profileImgPath}
-          />
-          <Dropdown.Button
-            className='profileUploadButton'
-            overlay={profileUploadMenu(setNewProfileImg, ref)}
-            icon={<CameraOutlined />}
-          />
-        </ProfileImgContainer>
+        <Row gutter={24}>
+          <Col span={10}>
+            <ProfileImgContainer>
+              <Avatar
+                size={200}
+                src={newProfileImg || getEndpoint() + me!.profileImgPath}
+              />
+              <Dropdown.Button
+                className='profileUploadButton'
+                overlay={profileUploadMenu(setNewProfileImg, ref)}
+                icon={<CameraOutlined />}
+              />
+            </ProfileImgContainer>
+          </Col>
+          <Col span={14}>
+            <ProfileContainer>
+              <div>
+                Username: <br />
+                <Typography.Text
+                  editable={{
+                    enterIcon: null,
+                    onChange: setUsername,
+                    triggerType: ['text'],
+                  }}
+                  style={{
+                    padding: 0,
+                    margin: 0,
+                  }}
+                >
+                  {username ? username : me!.username}
+                </Typography.Text>
+              </div>
+              <div>
+                Email: {}
+              </div>
+              <div>
+                Set Password
+              </div>
+              <div>
+                Confirm Password
+              </div>
+              <Button type='primary'>
+                Save
+              </Button>
+            </ProfileContainer>
+          </Col>
+        </Row>
       </Modal>
     </>
   )
