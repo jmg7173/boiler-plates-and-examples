@@ -19,8 +19,8 @@ const SignUpView: React.FC = () => {
     <Container>
       <h1>Welcome to Boilerplate!</h1>
       <Form
-        onFinish={async (event) => {
-          const { username, email, password } = event
+        onFinish={async (values) => {
+          const { username, email, password } = values
           try {
             const uri = '/auth/signup'
             await fetchAPI(uri, 'post', {
@@ -30,7 +30,7 @@ const SignUpView: React.FC = () => {
             })
             navigate('/login')
           } catch (e: ResponseType | any) {
-            if (e.status !== 400){
+            if (e.status !== 400) {
               setErrorMessage(`Unknown error occurred: ${ e.status }`)
               return
             }
@@ -40,7 +40,11 @@ const SignUpView: React.FC = () => {
               email: errorEmail,
               password: errorPassword,
             } = errorResponse.validation
-            setErrorMessage([errorUsername, errorEmail, errorPassword].join('\n'))
+            setErrorMessage([
+              errorUsername,
+              errorEmail,
+              errorPassword,
+            ].filter(x => x).join('\n'))
           }
         }}
       >

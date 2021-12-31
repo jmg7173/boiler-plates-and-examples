@@ -1,11 +1,12 @@
 import React, { SetStateAction, useEffect, useRef, useState } from 'react'
-import { Avatar, Button, Col, Dropdown, Menu, Modal, Row, Typography } from 'antd'
+import { Avatar, Button, Col, Dropdown, Form, Input, Menu, Modal, Row } from 'antd'
 import { meState } from '../../stores/me'
-import { useRecoilValue } from 'recoil'
-import { getEndpoint } from '../../utils/fetch/fetchAPI'
+import { useRecoilState } from 'recoil'
+import { fetchAPI, getEndpoint, getMe } from '../../utils/fetch/fetchAPI'
 import { ProfileContainer, ProfileImgContainer } from './ProfileModal.style'
-import { CameraOutlined } from '@ant-design/icons'
+import { CameraOutlined, MailOutlined, UserOutlined } from '@ant-design/icons'
 import { MenuInfo } from 'rc-menu/lib/interface'
+import { IUser } from '../../interfaces/User'
 
 const profileUploadMenu = (
   setNewProfileImg: React.Dispatch<SetStateAction<any>>,
@@ -53,6 +54,122 @@ const profileUploadMenu = (
   )
 }
 
+interface IProfileUpdateForm {
+  setIsEdit: React.Dispatch<SetStateAction<boolean>>
+  setNewProfileImg: React.Dispatch<SetStateAction<any>>
+  editErrorMessage: string
+  handleSave: (values: any) => Promise<void>
+  me: IUser
+}
+const ProfileUpdateForm: React.FC<IProfileUpdateForm> = ({
+  setIsEdit,
+  setNewProfileImg,
+  editErrorMessage,
+  handleSave,
+  me,
+}) => {
+  return (<>
+    <Form
+      onFinish={handleSave}
+      initialValues={{
+        username: me.username,
+        email: me.email,
+      }}
+    >
+      {!!editErrorMessage && (
+        <p className='errorMsg' style={{ color: 'red' }}>
+          {editErrorMessage.split('\n').map((message: string) => {
+            console.log(message)
+            return (<>{ message }<br/></>)
+          })}
+        </p>
+      )}
+      Username
+      <Form.Item
+        name='username'
+      >
+        <Input
+          name='Username'
+          placeholder='Username'
+        />
+      </Form.Item>
+      Email
+      <Form.Item
+        name='email'
+        rules={[
+          {
+            message: 'Invalid email format!',
+            type: 'email',
+          },
+        ]}
+      >
+        <Input
+          name='email'
+          placeholder='test@test.com'
+        />
+      </Form.Item>
+      Password
+      <Form.Item
+        name='password'
+        rules={[
+          {
+            message: 'Need more than 8 characters, ' +
+              'mixed with upper, lower, numbers, specials(!@#$%^&*)!',
+            pattern: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,100}$/,
+          },
+        ]}
+      >
+        <Input.Password
+          name='password'
+          placeholder='Password'
+        />
+      </Form.Item>
+      Check password
+      <Form.Item
+        name='checkPassword'
+        dependencies={['password']}
+        rules={[
+          ({ getFieldValue }) => ({
+            validator(rule, value) {
+              if ((getFieldValue('password') && !value) || (!getFieldValue && value)) {
+                return Promise.reject('Please put password if you want to modify it')
+              }
+              if (getFieldValue('password') === value) {
+                return Promise.resolve()
+              }
+              return Promise.reject('Password and password checking are different!')
+            },
+          }),
+        ]}
+      >
+        <Input.Password
+          placeholder='Check password'
+        />
+      </Form.Item>
+      <Form.Item
+        name='button'
+      >
+        <div className='onEditButtonWrapper'>
+          <Button
+            type='primary'
+            htmlType='submit'
+          >
+            Save
+          </Button>
+          <Button
+            onClick={() => {
+              setIsEdit(false)
+              setNewProfileImg(null)
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      </Form.Item>
+    </Form>
+  </>)
+}
+
 interface IProfileModalProps {
   showModal: string | null
   setShowModal: React.Dispatch<SetStateAction<string | null>>
@@ -61,11 +178,52 @@ const ProfileModal: React.FC<IProfileModalProps> = ({
   showModal,
   setShowModal,
 }) => {
-  const me = useRecoilValue(meState)
+  const [me, setMe] = useRecoilState(meState)
   const ref = useRef<HTMLInputElement>(null)
   const [newProfileImg, setNewProfileImg] = useState(null)
+  const [isEdit, setIsEdit] = useState<boolean>(false)
+  const [editErrorMessage, setEditErrorMessage] = useState<string>('')
+
+
   const handleCancel = () => setShowModal(null)
-  const [username, setUsername] = useState('')
+  const handleSave = async (values: any) => {
+    const { username, email, password } = values
+    try {
+      const uri = `/users/${me!.id}`
+      const data = {
+        username: me!.username === username ? null : username,
+        email: me!.email === email ? null : email,
+        profileImg: newProfileImg,
+        password: password,
+      }
+      if (!data.username && !data.email && !data.profileImg && !data.password) {
+        setIsEdit(false)
+        return
+      }
+      await fetchAPI(uri, 'put', data)
+      const user = await getMe()
+      setMe(() => {
+        return {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          profileImgPath: user.profile_img_path,
+        }
+      })
+      setNewProfileImg(null)
+      setIsEdit(false)
+    } catch (e: ResponseType | any) {
+      if (e.status !== 400) {
+        return
+      }
+      const errorResponse = await e.json()
+      const {
+        username: errorUsername,
+        email: errorEmail,
+      } = errorResponse.validation
+      setEditErrorMessage([errorUsername, errorEmail].filter(x => x).join('\n'))
+    }
+  }
 
   useEffect(() => {
     setNewProfileImg(null)
@@ -90,43 +248,37 @@ const ProfileModal: React.FC<IProfileModalProps> = ({
                 size={200}
                 src={newProfileImg || getEndpoint() + me!.profileImgPath}
               />
-              <Dropdown.Button
-                className='profileUploadButton'
-                overlay={profileUploadMenu(setNewProfileImg, ref)}
-                icon={<CameraOutlined />}
-              />
+              {isEdit && <Dropdown.Button
+                className="profileUploadButton"
+                overlay={ profileUploadMenu(setNewProfileImg, ref) }
+                icon={ <CameraOutlined /> }
+              />}
             </ProfileImgContainer>
           </Col>
           <Col span={14}>
             <ProfileContainer>
-              <div>
-                Username: <br />
-                <Typography.Text
-                  editable={{
-                    enterIcon: null,
-                    onChange: setUsername,
-                    triggerType: ['text'],
-                  }}
-                  style={{
-                    padding: 0,
-                    margin: 0,
-                  }}
-                >
-                  {username ? username : me!.username}
-                </Typography.Text>
-              </div>
-              <div>
-                Email: {}
-              </div>
-              <div>
-                Set Password
-              </div>
-              <div>
-                Confirm Password
-              </div>
-              <Button type='primary'>
-                Save
-              </Button>
+              {isEdit
+                ? <ProfileUpdateForm
+                  setIsEdit={setIsEdit}
+                  setNewProfileImg={setNewProfileImg}
+                  editErrorMessage={editErrorMessage}
+                  handleSave={handleSave}
+                  me={me!}
+                /> : (<>
+                  <div className='userInfo'>
+                    <UserOutlined /> {me!.username}
+                  </div>
+                  <div className='userInfo'>
+                    <MailOutlined /> {me!.email}
+                  </div>
+                  <Button
+                    className='editProfileButton'
+                    onClick={() => {setIsEdit(true)}}
+                  >
+                    Edit Profile
+                  </Button>
+                </>)
+              }
             </ProfileContainer>
           </Col>
         </Row>
