@@ -1,6 +1,7 @@
 import base64
 import os
 import urllib.request
+import uuid
 from hashlib import md5
 from pathlib import Path
 from typing import Dict
@@ -65,7 +66,7 @@ class User(PaginatedAPIMixin, db.Model):
     def set_profile_img(self, username, encoded_img=None, is_default_img=False):
         profile_img_base_dir = Path('images/profile')
         profile_img_dir = config.VOLUME_PATH / profile_img_base_dir
-        profile_img_filename = f'{username}.png'
+        profile_img_filename = f'{username}_{uuid.uuid4().hex}.png'
         profile_img_fullpath = profile_img_dir / profile_img_filename
         profile_img_request_path = profile_img_base_dir / profile_img_filename
         os.makedirs(profile_img_dir, exist_ok=True)
@@ -79,6 +80,9 @@ class User(PaginatedAPIMixin, db.Model):
             img = base64.b64decode(encoded_img)
             with open(profile_img_fullpath, 'wb') as f:
                 f.write(img)
+
+        if self.profile_img_path:
+            os.remove(config.VOLUME_PATH / self.profile_img_path)
 
         self.profile_img_path = str(profile_img_request_path)
 

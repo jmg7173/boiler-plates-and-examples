@@ -36,21 +36,33 @@ def update_user(id: int) -> Union[Response, Tuple[Response, int]]:
 
     data = request.get_json()
     user = User.query.filter_by(id=id).first()
-    if user.username != username:
-        return jsonify(message="Not updatable other user's profile!"), 401
 
-    data = request.get_json()
-    profile_img = data.get('profileImg')
-    if profile_img:
-        user.set_profile_img(username, profile_img)
+    error = {}
+    email = data.get('email')
+    if email:
+        email_exist_user = User.query.filter_by(email=email).first()
+        if email_exist_user:
+            error['email'] = 'Already exists email!'
+        user.email = email
+
+    username = data.get('username')
+    if username:
+        username_exist_user = User.query.filter_by(username=username).first()
+        if username_exist_user:
+            error['username'] = 'Already exists username!'
+        user.username = username
 
     password = data.get('password')
     if password:
         user.set_password(password)
 
-    email = data.get('email')
-    if email:
-        user.email = email
+    profile_img_str = data.get('profileImg')
+    if profile_img_str:
+        profile_img_encoded = profile_img_str[profile_img_str.find(',')+1:]
+        user.set_profile_img(user.username, profile_img_encoded)
+
+    if error:
+        return jsonify(validation=error), 400
 
     db.session.commit()
 
