@@ -21,6 +21,7 @@ function App() {
         setMe({
           id: user.id,
           username: user.username,
+          email: user.email,
           profileImgPath: user.profile_img_path,
         })
       }

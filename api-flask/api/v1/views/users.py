@@ -30,7 +30,11 @@ def get_user(id: int) -> Response:
 @users_api.put('/<int:id>')
 @jwt_required()
 def update_user(id: int) -> Union[Response, Tuple[Response, int]]:
-    username = get_jwt_identity()
+    user_id = get_jwt_identity()
+    if user_id != id:
+        return jsonify(message="Not updatable other user's profile!"), 401
+
+    data = request.get_json()
     user = User.query.filter_by(id=id).first()
     if user.username != username:
         return jsonify(message="Not updatable other user's profile!"), 401

@@ -35,10 +35,9 @@ def login() -> Tuple[Response, int]:
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
         return jsonify(
-            access_token=create_access_token(identity=username),
-            refresh_token=create_refresh_token(identity=username),
-            id=user.id,
-            profile_img_path=user.profile_img_path,
+            access_token=create_access_token(identity=user.id),
+            refresh_token=create_refresh_token(identity=user.id),
+            user=user.to_dict(),
         ), 200
 
     return jsonify({'message': 'Identification information is not correct'}), 400
@@ -55,9 +54,9 @@ def logout() -> Response:
 @auth_api.get('/me')
 @jwt_required()
 def me() -> Response:
-    username = get_jwt_identity()
-    user = User.query.filter_by(username=username).first()
-    return jsonify(id=user.id, username=username, profile_img_path=user.profile_img_path)
+    user_id = get_jwt_identity()
+    user = User.query.filter_by(id=user_id).first()
+    return jsonify(user.to_dict())
 
 
 @auth_api.post('/signup')

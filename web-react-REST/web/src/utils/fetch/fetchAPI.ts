@@ -30,17 +30,17 @@ export const login = async (data: Record<string, any>, setMe: SetterOrUpdater<IU
   const {
     access_token: accessToken,
     refresh_token: refreshToken,
-    id: id,
-    profile_img_path: profileImgPath,
+    user,
   } = await fetchAPI('/auth/login', 'post', data)
 
   const fetcher = FetchManager.getInstance()
   fetcher.setAccessToken(accessToken)
   fetcher.setRefreshToken(refreshToken)
   setMe({
-    id: id,
-    username: data.username,
-    profileImgPath,
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    profileImgPath: user.profile_img_path,
   })
 }
 
