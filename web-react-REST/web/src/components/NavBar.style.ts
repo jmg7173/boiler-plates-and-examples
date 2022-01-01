@@ -36,6 +36,14 @@ export const RightContainer = styled.div`
   .avatar {
     cursor: pointer;
   }
+  .alarmBadge {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    .ant-badge-count {
+      box-shadow: none;
+    }
+  }
 `
 export const MenuContainer = styled.div`
   .userInfo {

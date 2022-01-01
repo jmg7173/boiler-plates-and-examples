@@ -6,13 +6,14 @@ import {
   MenuContainer,
   RightContainer,
 } from './NavBar.style'
-import { Avatar, Button, Dropdown, Menu, message } from 'antd'
+import { Avatar, Badge, Button, Dropdown, Menu, message } from 'antd'
 import { Link } from 'react-router-dom'
 import { SetterOrUpdater, useRecoilState } from 'recoil'
 import { meState } from '../stores/me'
 import { getEndpoint, logout } from '../utils/fetch/fetchAPI'
 import { IUser } from '../interfaces/User'
 import {
+  BellOutlined,
   LogoutOutlined,
   SettingOutlined,
   UserOutlined,
@@ -77,6 +78,14 @@ const NavBar: React.FC = () => {
       <RightContainer>
         {me
           ? (<>
+            <Badge
+              count={10}
+              className='alarmBadge'
+              offset={[4, 4]}
+              overflowCount={9}
+            >
+              <BellOutlined style={{ fontSize: 25 }}/>
+            </Badge>
             <Dropdown
               overlay={menu(me, setMe, showModal, setShowModal)}
               trigger={['click']}
