@@ -9,9 +9,8 @@ from flask_jwt_extended import (
     jwt_required, get_jwt, get_jwt_identity,
 )
 
-from app import db
 from config import Config, get_config
-from models import User
+from models import User, db
 
 auth_api = Blueprint('auth', __name__, url_prefix='/auth')
 

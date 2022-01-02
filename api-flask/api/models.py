@@ -7,13 +7,17 @@ from pathlib import Path
 from typing import Dict
 
 from flask import url_for
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app import db
 from config import Config, get_config
 
 config: Config = get_config(os.environ.get('APP_MODE'))
+
+db = SQLAlchemy()
+migrate = Migrate()
 
 
 class PaginatedAPIMixin(object):
