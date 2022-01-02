@@ -41,7 +41,7 @@ services:
     volumes:
       -  ../../${VOLUME_PATH}/data:/var/lib/postgresql/data
     ports:
-      - ${POSTGRESQL_PORT}:5432
+      - ${POSTGRESQL_EXPOSE_PORT}:5432
     networks:
       - ${DOCKER_NETWORK_NAME}
 
