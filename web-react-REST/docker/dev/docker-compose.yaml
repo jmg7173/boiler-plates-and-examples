@@ -1,7 +1,6 @@
 version: "3.8"
 services:
-  web-rest-dev:
-    container_name: web-rest-dev
+  web:
     restart: always
     image: app/web-react-rest:dev
     env_file:
@@ -12,8 +11,8 @@ services:
     working_dir: /opt/app/web
     command: "yarn start"
     networks:
-      - app
+      - ${DOCKER_NETWORK_NAME}
 
 networks:
-  app:
+  app-dev:
     external: true

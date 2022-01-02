@@ -1,66 +1,63 @@
 version: "3.8"
 services:
-  app-nginx-dev:
-    container_name: api-flask-nginx-dev
+  nginx:
     restart: always
     image: nginx:1.21.4
     ports:
-      - 8000:80
+      - ${NGINX_PORT}:80
     volumes:
-      - $PWD/../../nginx/nginx-dev.conf:/etc/nginx/nginx.conf
-      - $PWD/../../volumes/images:/static/images
+      -  ../../nginx/nginx-dev.conf:/etc/nginx/nginx.conf
+      -  ../../${VOLUME_PATH}/images:/static/images
     networks:
-      - app
+      - ${DOCKER_NETWORK_NAME}
     depends_on:
-      - api-flask-dev
+      - api
 
-  api-flask-dev:
+  api:
     image: app/api-flask:dev
     build:
-      context: $PWD/../../
-      dockerfile: $PWD/../base/Dockerfile
-    container_name: api-flask-dev
+      context:  ../../
+      dockerfile:  ../base/Dockerfile
     restart: always
     env_file:
-      - $PWD/../../.env.dev
+      -  ../../${ENV_PATH}
     volumes:
-      - $PWD/../../api:/opt/app/api
-      - $PWD/../../volumes:/opt/app/volumes
+      -  ../../api:/opt/app/api
+      -  ../../${VOLUME_PATH}:/opt/app/volumes
     working_dir: /opt/app/api
     command: "python3 app.py"
     networks:
-      - app
+      - ${DOCKER_NETWORK_NAME}
     depends_on:
-      - api-postgres-dev
+      - db
+      - redis
 
-  api-postgres-dev:
-    container_name: api-postgres-dev
+  db:
     restart: always
     image: postgres:14
     environment:
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
     volumes:
-      - $PWD/../../volumes/data:/var/lib/postgresql/data
+      -  ../../${VOLUME_PATH}/data:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - ${POSTGRESQL_PORT}:5432
     networks:
-      - app
+      - ${DOCKER_NETWORK_NAME}
 
-  api-redis-dev:
-    container_name: api-redis-dev
+  redis:
     image: redis:6.2.6
     restart: always
     volumes:
-      - $PWD/../../volumes/redis_data:/data
-    ports:
-      - 6379:6379
+      -  ../../${VOLUME_PATH}/redis_data:/data
     networks:
-      - app
+      - ${DOCKER_NETWORK_NAME}
 
 volumes:
   postgres:
 
 networks:
-  app:
+  app-dev:
+    external: true
+  app-test:
     external: true
