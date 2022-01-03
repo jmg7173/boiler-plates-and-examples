@@ -36,3 +36,30 @@ FLASK_APP=manage:app flask db downgrade
 ```
 
 ## Testing flask app
+### When running only using docker
+```bash
+cd docker/test
+./run.sh
+```
+
+### When running on local environment
+```bash
+cd api
+./test_local.sh
+```
+
+### With pycharm pytest with coverage
+* pytest configuration  
+![pytest configuration](readme_images/pycharm_pytest_configure.png)
+
+* Before running pytest, script configuration  
+![docker compose up configuration](readme_images/docker_compose_up_for_pytest.png)
+
+* (Optional) tear down loaded test container  
+```bash
+# On api directory,
+docker-compose -p api-flask-test -f ../docker/dev/docker-compose.yaml down
+
+# Or at docker/dev directory,
+docker-compose -p api-flask-test down
+```
