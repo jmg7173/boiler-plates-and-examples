@@ -88,7 +88,6 @@ def signup() -> Union[Response, Tuple[Response, int]]:
         email=email,
     )
     user.set_password(password)
-    user.set_profile_img(username, is_default_img=True)
     db.session.add(user)
     db.session.commit()
     return jsonify({'message': 'Successfully registered!'})

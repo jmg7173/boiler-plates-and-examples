@@ -57,16 +57,6 @@ class User(PaginatedAPIMixin, db.Model):
     created_at = db.Column(db.DateTime, server_default=func.now())
     profile_img_path = db.Column(db.String(150))
 
-    def __init__(self, username, email):
-        self.username = username
-        self.email = email
-
-    def set_password(self, password):
-        self.password = generate_password_hash(password)
-
-    def check_password(self, password) -> bool:
-        return check_password_hash(self.password, password)
-
     def set_profile_img(self, username, encoded_img=None, is_default_img=False):
         profile_img_base_dir = Path('images/profile')
         profile_img_dir = config.VOLUME_PATH / profile_img_base_dir
@@ -89,6 +79,17 @@ class User(PaginatedAPIMixin, db.Model):
             os.remove(config.VOLUME_PATH / self.profile_img_path)
 
         self.profile_img_path = str(profile_img_request_path)
+
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
+        self.set_profile_img(self.username, is_default_img=True)
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password) -> bool:
+        return check_password_hash(self.password, password)
 
     def to_dict(self) -> Dict:
         return {
