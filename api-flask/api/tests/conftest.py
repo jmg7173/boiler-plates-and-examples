@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import pytest
 
@@ -28,3 +29,13 @@ def database(app):
         db.create_all()
 
     yield db
+
+
+@pytest.fixture(scope='function')
+def profile_image(request):
+    shutil.rmtree(config.VOLUME_PATH / 'images' / 'profile', ignore_errors=True)
+
+    def teardown():
+        shutil.rmtree(config.VOLUME_PATH / 'images' / 'profile', ignore_errors=True)
+
+    request.addfinalizer(teardown)
