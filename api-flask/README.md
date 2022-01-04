@@ -50,12 +50,12 @@ cd api
 
 ### With pycharm pytest with coverage
 * pytest configuration  
-![pytest configuration](readme_images/pycharm_pytest_configure.png)
+![pytest configuration](https://user-images.githubusercontent.com/9067305/148078370-2f945c3f-60c5-4283-be15-5595fc6e4f03.png)
 
 * Before running pytest, script configuration  
-![docker compose up configuration](readme_images/docker_compose_up_for_pytest.png)
+![docker compose up configuration](https://user-images.githubusercontent.com/9067305/148078272-561efc1b-b467-498c-b26c-e0b9012bd5ad.png)
 
-* (Optional) tear down loaded test container  
+* (Optional) teardown loaded test container  
 ```bash
 # On api directory,
 docker-compose -p api-flask-test -f ../docker/dev/docker-compose.yaml down
