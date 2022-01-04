@@ -31,6 +31,11 @@ def database(app):
     yield db
 
 
+@pytest.fixture
+def client(app):
+    return app.test_client()
+
+
 @pytest.fixture(scope='function')
 def profile_image(request):
     shutil.rmtree(config.VOLUME_PATH / 'images' / 'profile', ignore_errors=True)
