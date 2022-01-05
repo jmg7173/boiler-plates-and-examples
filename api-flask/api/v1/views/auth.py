@@ -63,6 +63,7 @@ def signup() -> Union[Response, Tuple[Response, int]]:
     data = request.get_json()
     if not data:
         return jsonify({'validation': 'Empty signup data!'}), 400
+
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
