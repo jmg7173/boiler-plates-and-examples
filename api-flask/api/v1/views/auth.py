@@ -61,6 +61,8 @@ def me() -> Response:
 @auth_api.post('/signup')
 def signup() -> Union[Response, Tuple[Response, int]]:
     data = request.get_json()
+    if not data:
+        return jsonify({'validation': 'Empty signup data!'}), 400
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
@@ -69,7 +71,7 @@ def signup() -> Union[Response, Tuple[Response, int]]:
             'username': '' if username else 'Empty username field!',
             'email': '' if email else 'Empty email field!',
             'password': '' if password else 'Empty password field!',
-        }})
+        }}), 400
 
     user = User.query.filter_by(username=username).first()
     error_msg = {}
