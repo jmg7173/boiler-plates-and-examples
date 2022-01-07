@@ -9,6 +9,7 @@ from flask_jwt_extended import (
     jwt_required, get_jwt, get_jwt_identity,
 )
 
+from app import jwt
 from config import Config, get_config
 from models import User, db
 
@@ -25,6 +26,9 @@ RedisSession = redis.StrictRedis(
 @auth_api.post('/login')
 def login() -> Tuple[Response, int]:
     data = request.get_json()
+    if not data:
+        return jsonify({'message': 'Please put both username and password'}), 400
+
     username = data.get('username')
     password = data.get('password')
 
@@ -40,6 +44,12 @@ def login() -> Tuple[Response, int]:
         ), 200
 
     return jsonify({'message': 'Identification information is not correct'}), 400
+
+
+@jwt.token_in_blocklist_loader
+def check_if_token_is_revoked(jwt_header, jwt_payload):
+    jti = jwt_payload['jti']
+    return RedisSession.get(jti) is not None
 
 
 @auth_api.post('/logout')
