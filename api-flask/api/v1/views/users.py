@@ -33,6 +33,9 @@ def update_user(id: int) -> Union[Response, Tuple[Response, int]]:
     if user_id != id:
         return jsonify(message="Not updatable other user's profile!"), 401
 
+    if not request.data:
+        return jsonify(message='No changes requested'), 200
+
     data = request.get_json()
     user = User.query.filter_by(id=id).first()
 
@@ -42,14 +45,20 @@ def update_user(id: int) -> Union[Response, Tuple[Response, int]]:
         email_exist_user = User.query.filter_by(email=email).first()
         if email_exist_user:
             error['email'] = 'Already exists email!'
-        user.email = email
+        else:
+            user.email = email
 
     username = data.get('username')
     if username:
         username_exist_user = User.query.filter_by(username=username).first()
         if username_exist_user:
             error['username'] = 'Already exists username!'
-        user.username = username
+        else:
+            user.username = username
+
+    if error:
+        db.session.rollback()
+        return jsonify(validation=error), 400
 
     password = data.get('password')
     if password:
@@ -57,11 +66,8 @@ def update_user(id: int) -> Union[Response, Tuple[Response, int]]:
 
     profile_img_str = data.get('profileImg')
     if profile_img_str:
-        profile_img_encoded = profile_img_str[profile_img_str.find(',')+1:]
+        profile_img_encoded = profile_img_str[profile_img_str.find(',') + 1:]
         user.set_profile_img(user.username, profile_img_encoded)
-
-    if error:
-        return jsonify(validation=error), 400
 
     db.session.commit()
 
