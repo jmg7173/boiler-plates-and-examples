@@ -12,7 +12,7 @@ docker-compose -p api-flask-test -f ../dev/docker-compose.yaml rm -sf nginx
 
 cnt=0
 echo "waiting for 30 seconds to DB container up"
-while ! docker-compose -p api-flask-test logs db | grep -q "ready to accept connections"; do
+while ! docker-compose -p api-flask-test -f ../dev/docker-compose.yaml logs db | grep -q "ready to accept connections"; do
   sleep 1
   ((cnt++))
   if [ $cnt -ge 30 ]; then
@@ -22,10 +22,11 @@ while ! docker-compose -p api-flask-test logs db | grep -q "ready to accept conn
   fi
 done
 echo "DB container up!"
-docker-compose -p api-flask-test exec api bash -c "flask db upgrade"
+docker exec -t api-flask-test_api_1 bash -c "flask db upgrade"
 
 if [ $IS_DOCKER -eq 1 ]; then
-  docker-compose -p api-flask-test exec api bash -c "pytest -svv --cov=. --cov-report=term-missing"
+  docker exec -t api-flask-test_api_1 \
+    bash -c "pytest -svv --cov=. --cov-report=term-missing"
   docker-compose -p api-flask-test -f ../dev/docker-compose.yaml down
   echo "Successfully finished pytest for api!"
 fi

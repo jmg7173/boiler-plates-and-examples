@@ -1,0 +1,40 @@
+name: Python backend build and test
+
+on:
+  [push]
+
+jobs:
+  lint-flask:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      - name: Lint flask app
+        run: |
+          cd api-flask/api
+          flake8 . --count --show-source --statistics
+
+  build-flask-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build flask app dockerfile
+        run: |
+          cd api-flask/docker/base
+          ./build_docker.sh
+
+      - name: Run pytest
+        run: |
+          cd api-flask/docker/test
+          ./run.sh
