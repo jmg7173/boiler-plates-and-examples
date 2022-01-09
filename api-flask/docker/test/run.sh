@@ -27,6 +27,8 @@ docker exec -t api-flask-test_api_1 bash -c "flask db upgrade"
 if [ $IS_DOCKER -eq 1 ]; then
   docker exec -t api-flask-test_api_1 \
     bash -c "pytest -svv --cov=. --cov-report=term-missing"
+  result=$?
   docker-compose -p api-flask-test -f ../dev/docker-compose.yaml down
   echo "Successfully finished pytest for api!"
+  exit $result
 fi
