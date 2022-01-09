@@ -1,5 +1,4 @@
 import base64
-import pprint
 
 from models import User
 
@@ -7,7 +6,6 @@ from models import User
 def test_users(client, user):
     res = client.get('/v1/api/users/')
     data = res.json
-    pprint.pprint(data)
     assert res.status_code == 200
     assert len(data['items']) == 1
 
