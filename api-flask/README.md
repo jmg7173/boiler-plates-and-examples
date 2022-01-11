@@ -1,5 +1,7 @@
 # API application with flask
 
+[![codecov](https://codecov.io/gh/jmg7173/boiler-plates-and-examples/branch/main/graph/badge.svg?token=SF2LV9A3N8)](https://codecov.io/gh/jmg7173/boiler-plates-and-examples)
+
 ## Run flask app
 
 ### Development environment

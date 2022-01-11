@@ -38,3 +38,16 @@ jobs:
         run: |
           cd api-flask/docker/test
           ./run.sh
+          cd ../../../
+          
+      - uses: codecov/codecov-action@v2
+        name: Run codecov
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./api-flask/api
+          working-directory: ./api-flask/api
+          files: ./coverage.xml
+          flags: pytest
+          name: codecov-umbrella
+          verbose: true
