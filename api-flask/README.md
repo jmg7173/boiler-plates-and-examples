@@ -27,8 +27,16 @@ cd docker/dev
 ./run.sh
 ```
 
+### DB migration
+**TBD**
 
-### On local with flask cli
+### On local with flask cli (Optional)
+Before running flask application at your local host, install python 3.10.0 first.  
+You may use virtualenv, conda, pyenv and so on. And then, install packages that needed at flask application:
+```bash
+pip install -r api/requirements.txt
+```
+Now you can run your command at your local host.
 ```bash
 # On managing db
 FLASK_APP=manage:app flask db init
