@@ -1,4 +1,4 @@
-name: Python backend build and test
+name: Flask build and test
 
 on:
   [push]
