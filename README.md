@@ -3,6 +3,11 @@
 [![codecov](https://codecov.io/gh/jmg7173/boiler-plates-and-examples/branch/main/graph/badge.svg?token=SF2LV9A3N8)](https://codecov.io/gh/jmg7173/boiler-plates-and-examples)
 > Currently, code coverage covers only api-flask repository.
 
+## Prerequisites
+* [Docker](https://docs.docker.com/engine/) (>= 20.10.11, build dea9396)
+* [docker-compose](https://docs.docker.com/compose/) (>= v2.2.1)
+* (For personal computers) [Docker Desktop](https://docs.docker.com/desktop/) (>= 4.3.1)
+
 ## How to run?
 1. Select backend framework directory (ex. api-flask)
 2. Select frontend framework directory (ex. web-react-REST)

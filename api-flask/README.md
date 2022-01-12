@@ -16,7 +16,7 @@ If some configuration in python package requirements (ex. `requirements.txt`) ha
 you should run this commands:
 ```bash
 cd docker/base
-./build_coker.sh
+./build_docker.sh
 cd ../dev
 ./run.sh
 ```
