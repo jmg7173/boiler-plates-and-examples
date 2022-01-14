@@ -1,7 +1,13 @@
 name: Flask build and test
 
 on:
-  [push]
+  push:
+    paths-ignore:
+      - 'api-apollo/**'
+      - 'api-django/**'
+      - 'api-sanic/**'
+      - 'web-react-REST/**'
+      - '*.md'
 
 jobs:
   lint-flask:
