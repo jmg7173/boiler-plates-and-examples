@@ -1,12 +1,14 @@
 # Boiler plates and examples
 ![flask](https://github.com/jmg7173/boiler-plates-and-examples/actions/workflows/flask.yaml/badge.svg)
 [![codecov](https://codecov.io/gh/jmg7173/boiler-plates-and-examples/branch/main/graph/badge.svg?token=SF2LV9A3N8)](https://codecov.io/gh/jmg7173/boiler-plates-and-examples)
-> Currently, code coverage covers only api-flask repository.
+> Currently, code coverage covers only api-flask directory.
 
 ## Prerequisites
 * [Docker](https://docs.docker.com/engine/) (>= 20.10.11, build dea9396)
 * [docker-compose](https://docs.docker.com/compose/) (>= v2.2.1)
 * (For personal computers) [Docker Desktop](https://docs.docker.com/desktop/) (>= 4.3.1)
+
+> For windows user, check this question - symbolic link issue: https://stackoverflow.com/a/42137273
 
 ## How to run?
 1. Select backend framework directory (ex. api-flask)
