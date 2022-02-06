@@ -2,11 +2,13 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   text-align: center;
-  width: 400px;
+  max-width: 400px;
   height: 450px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 100px;
+  padding-left: 8px;
+  padding-right: 8px;
   
   > h1 {
     margin-top: 40px;

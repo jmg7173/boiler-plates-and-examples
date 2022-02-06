@@ -226,6 +226,7 @@ const ProfileModal: React.FC<IProfileModalProps> = ({
   }
 
   useEffect(() => {
+    setIsEdit(false)
     setNewProfileImg(null)
     if (ref && ref.current) {
       ref.current.value = ''
