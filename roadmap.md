@@ -1,4 +1,5 @@
 # Roadmap
+Maybe it is too heavy for boilerplate project!
 
 ## Stage 1
 
@@ -6,7 +7,10 @@
 * [ ] Completing flask backend application
 * [ ] Add migration command script from host running at docker container
 * [ ] Add api using web socket
-  * [ ] Candidates: message between users
+  * Candidates:
+    * message between users
+    * alert to user something? <-- maybe need admin account and propagate some announcement
+      * propagate push alarm from admin?
 * [ ] Add long-running tasks that using celery
 
 ### Frontend
@@ -49,4 +53,6 @@
 ## Stage ?
 * [ ] Add spring api application
 * [ ] Add gRPC (but which feature uses it?)
+* [ ] Add golang based api application
 * [ ] Construct MSA architectured api application with test
+* [ ] Add scroll view (like apple?)
