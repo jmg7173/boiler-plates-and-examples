@@ -7,7 +7,7 @@ from v1.views import (
     users_api,
 )
 
-api = Blueprint('v1', __name__, url_prefix='/v1/api')
+api = Blueprint('v1', __name__, url_prefix='/api/v1')
 api.register_blueprint(auth_api)
 api.register_blueprint(users_api)
 

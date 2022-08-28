@@ -4,17 +4,17 @@ from models import User
 
 
 def test_users(client, user):
-    res = client.get('/v1/api/users/')
+    res = client.get('/api/v1/users/')
     data = res.json
     assert res.status_code == 200
     assert len(data['items']) == 1
 
 
 def test_get_user(client, user):
-    res = client.get('/v1/api/users/2')
+    res = client.get('/api/v1/users/2')
     assert res.status_code == 404
 
-    res = client.get('/v1/api/users/1')
+    res = client.get('/api/v1/users/1')
     assert res.status_code == 200
     assert res.json == user.to_dict()
 
@@ -25,11 +25,11 @@ def test_update_user(app, client, database, user):
     database.session.add(user2)
     database.session.commit()
 
-    res = client.put('/v1/api/users/2')
+    res = client.put('/api/v1/users/2')
     assert res.status_code == 401
 
     res = client.post(
-        '/v1/api/auth/login',
+        '/api/v1/auth/login',
         json={
             'username': 'test2',
             'password': 'test2',
@@ -40,17 +40,17 @@ def test_update_user(app, client, database, user):
         'Content-Type': 'application/json',
     }
 
-    res = client.put('/v1/api/users/1', headers=headers)
+    res = client.put('/api/v1/users/1', headers=headers)
     assert res.status_code == 401
     assert res.json['message'] == "Not updatable other user's profile!"
 
-    res = client.put('/v1/api/users/2', headers=headers)
+    res = client.put('/api/v1/users/2', headers=headers)
     assert res.status_code == 200
     assert res.json['message'] == 'No changes requested'
 
     # Update with existing username / email
     res = client.put(
-        '/v1/api/users/2',
+        '/api/v1/users/2',
         headers=headers,
         json={'username': 'test'}
     )
@@ -62,7 +62,7 @@ def test_update_user(app, client, database, user):
     assert updated_user.to_dict() == user2.to_dict()
 
     res = client.put(
-        '/v1/api/users/2',
+        '/api/v1/users/2',
         headers=headers,
         json={'email': 'test@test.com'}
     )
@@ -74,7 +74,7 @@ def test_update_user(app, client, database, user):
     assert updated_user.to_dict() == user2.to_dict()
 
     res = client.put(
-        '/v1/api/users/2',
+        '/api/v1/users/2',
         headers=headers,
         json={'username': 'test', 'email': 'test@test.com'}
     )
@@ -94,7 +94,7 @@ def test_update_user(app, client, database, user):
     encoded_new_img = base64.b64encode(new_profile_img_binary)
 
     res = client.put(
-        '/v1/api/users/2',
+        '/api/v1/users/2',
         headers=headers,
         json={
             'profileImg': str(encoded_new_img)[2:-1],
@@ -110,7 +110,7 @@ def test_update_user(app, client, database, user):
 
     # Update profile
     res = client.put(
-        '/v1/api/users/2',
+        '/api/v1/users/2',
         headers=headers,
         json={'username': 'test3'}
     )
@@ -119,7 +119,7 @@ def test_update_user(app, client, database, user):
     assert updated_user.username == 'test3'
 
     res = client.put(
-        '/v1/api/users/2',
+        '/api/v1/users/2',
         headers=headers,
         json={'email': 'test3@test.com'}
     )
@@ -128,7 +128,7 @@ def test_update_user(app, client, database, user):
     assert updated_user.email == 'test3@test.com'
 
     res = client.put(
-        '/v1/api/users/2',
+        '/api/v1/users/2',
         headers=headers,
         json={'password': 'test3'}
     )
