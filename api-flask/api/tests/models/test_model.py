@@ -35,7 +35,7 @@ def test_user_dict(database):
         'created_at': user.created_at.strftime('%Y-%m-%dT%H:%M:%S'),
         'profile_img_path': user.profile_img_path,
         '_links': {
-            'self': f'/v1/api/users/{user.id}'
+            'self': f'/api/v1/users/{user.id}'
         }
     }
 
