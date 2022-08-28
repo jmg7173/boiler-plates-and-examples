@@ -66,6 +66,6 @@
     ]
   },
   "devDependencies": {
-    "eslint-config-airbnb-typescript": "^16.1.0"
+    "eslint-config-airbnb-typescript": "^17.0.0"
   }
 }
