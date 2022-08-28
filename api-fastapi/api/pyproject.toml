@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "boiler-fastapi"
+version = "0.1.0"
+description = ""
+authors = ["MinGyo Jung <jmg7173@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = {extras = ["all"], version = "^0.81.0"}
+pydantic = "^1.9.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
